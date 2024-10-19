@@ -1,241 +1,138 @@
 blueprint:
-  name: TS0044 Zigbee Remote
-  description: Configure actions for TS0044
+  name: Zigbee2MQTT - Tuya 4-Button Scene Switch TS004F
+  description: Automate your Tuya 4-Button Scene Switch (TS004F) via Zigbee2MQTT. Link - https://www.zigbee2mqtt.io/devices/TS004F.html
   domain: automation
-  author: Zachary Priddy
   input:
     switch:
-      name: Tuya 4-Button Scene Switch
-      description: Tuya 4-Button Scene Switch to use
+      name: TS004F Switch
+      description: Tuya 4-Button Wireless Switch
       selector:
         entity:
-          integration: mqtt
           domain: sensor
-
-    # Actions
-    button_1_press:
-      name: Actions for Button 1 Pressed
-      default:
+          integration: mqtt
+    button_1_short_press:
+      name: Button 1 - Single Press
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
       selector:
-        action:
-
+        action: null
+    button_1_hold:
+      name: Button 1 - Hold
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
+      selector:
+        action: null
     button_1_double_press:
-      name: Actions for Button 1 Double Pressed
-      default:
+      name: Button 1 - Double Press
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
       selector:
-        action:
-
-    button_1_held:
-      name: Actions for Button 1 Held
-      default:
+        action: null
+    button_2_short_press:
+      name: Button 2 - Single Press
+      description: Action to run on button 2 (lower-right) single press
+      default: []
       selector:
-        action:
-
-    button_2_press:
-      name: Actions for Button 2 Pressed
-      default:
+        action: null
+    button_2_hold:
+      name: Button 2 - Hold
+      description: Action to run on button 2 (lower-right) single press
+      default: []
       selector:
-        action:
-
+        action: null
     button_2_double_press:
-      name: Actions for Button 2 Double Pressed
-      default:
+      name: Button 2 - Double Press
+      description: Action to run on button 2 (lower-right) single press
+      default: []
       selector:
-        action:
-
-    button_2_held:
-      name: Actions for Button 2 Held
-      default:
+        action: null
+    button_3_short_press:
+      name: Button 3 - Single Press
+      description: Action to run on button 3 (top-right) single press
+      default: []
       selector:
-        action:
-
-    button_3_press:
-      name: Actions for Button 3 Pressed
-      default:
+        action: null
+    button_3_hold:
+      name: Button 3 - Hold
+      description: Action to run on button 3 (top-right) single press
+      default: []
       selector:
-        action:
-
+        action: null
     button_3_double_press:
-      name: Actions for Button 3 Double Pressed
-      default:
+      name: Button 3 - Double Press
+      description: Action to run on button 3 (top-right) single press
+      default: []
       selector:
-        action:
-
-    button_3_held:
-      name: Actions for Button 3 Held
-      default:
+        action: null
+    button_4_short_press:
+      name: Button 4 - Single Press
+      description: Action to run on button 4 (top-left) single press
+      default: []
       selector:
-        action:
-
-    button_4_press:
-      name: Actions for Button 4 Pressed
-      default:
+        action: null
+    button_4_hold:
+      name: Button 4 - Long Press
+      description: Action to run on button 4 (lower-left) long press
+      default: []
       selector:
-        action:
-
+        action: null
     button_4_double_press:
-      name: Actions for Button 4 Double Pressed
-      default:
+      name: Button 4 - Double Press
+      description: Action to run on button 4 (lower-left) long press
+      default: []
       selector:
-        action:
-
-    button_4_held:
-      name: Actions for Button 4 Held
-      default:
-      selector:
-        action:
-
-mode: parallel
-max: 10
-
+        action: null
+  source_url: https://gist.github.com/whalelion/5f19317ea530687a768ed2c34218cbc4
+mode: single
+max_exceeded: silent
+variables:
+  command: "{{ trigger.payload }}"
+  topic: "{{ trigger.topic }}"
+  switch_name: !input "switch"
+  deviceName: "{{ state_attr(switch_name, 'friendly_name') }}"
 trigger:
-
-  # Button 1
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: button_1
-    id: b1-1
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_double_press
-    subtype: button_1
-    id: b1-2
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_long_press
-    subtype: button_1
-    id: b1-h
-    
-    # Button 2
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: button_2
-    id: b2-1
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_double_press
-    subtype: button_2
-    id: b2-2
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_long_press
-    subtype: button_2
-    id: b2-h
-
-    # Button 3
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: button_3
-    id: b3-1
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_double_press
-    subtype: button_3
-    id: b3-2
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_long_press
-    subtype: button_3
-    id: b3-h
-
-    # Button 4
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_short_press
-    subtype: button_4
-    id: b4-1
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_double_press
-    subtype: button_4
-    id: b4-2
-  - device_id: !input ts0044_device
-    domain: zha
-    platform: device
-    type: remote_button_long_press
-    subtype: button_4
-    id: b4-h
-
+  - platform: mqtt
+    topic: zigbee2mqtt/+/action
 action:
   - choose:
-      # Button 1
       - conditions:
-          - condition: trigger
-            id:
-              - b1-1
-        sequence: !input button_1_press
-      - conditions:
-          - condition: trigger
-            id:
-              - b1-2
-        sequence: !input button_1_double_press
-      - conditions:
-          - condition: trigger
-            id:
-              - b1-h
-        sequence: !input button_1_held
-      
-      # Button 2
-      - conditions:
-          - condition: trigger
-            id:
-              - b1-1
-        sequence: !input button_2_press
-      - conditions:
-          - condition: trigger
-            id:
-              - b2-2
-        sequence: !input button_2_double_press
-      - conditions:
-          - condition: trigger
-            id:
-              - b2-h
-        sequence: !input button_2_held
-
-      # Button 3
-      - conditions:
-          - condition: trigger
-            id:
-              - b3-1
-        sequence: !input button_3_press
-      - conditions:
-          - condition: trigger
-            id:
-              - b3-2
-        sequence: !input button_3_double_press
-      - conditions:
-          - condition: trigger
-            id:
-              - b3-h
-        sequence: !input button_3_held
-
-      # Button 4
-      - conditions:
-          - condition: trigger
-            id:
-              - b4-1
-        sequence: !input button_4_press
-      - conditions:
-          - condition: trigger
-            id:
-              - b4-2
-        sequence: !input button_4_double_press
-      - conditions:
-          - condition: trigger
-            id:
-              - b4-h
-        sequence: !input button_4_held
+          - "{{ topic.split('/')[1].replace('/', '') == deviceName.split(' ')[0]
+            }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - "{{ command == '1_single' }}"
+                sequence: !input "button_1_short_press"
+              - conditions:
+                  - "{{ command == '2_single' }}"
+                sequence: !input "button_2_short_press"
+              - conditions:
+                  - "{{ command == '3_single' }}"
+                sequence: !input "button_3_short_press"
+              - conditions:
+                  - "{{ command == '4_single' }}"
+                sequence: !input "button_4_short_press"
+              - conditions:
+                  - "{{ command == '1_double' }}"
+                sequence: !input "button_1_double_press"
+              - conditions:
+                  - "{{ command == '2_double' }}"
+                sequence: !input "button_2_double_press"
+              - conditions:
+                  - "{{ command == '3_double' }}"
+                sequence: !input "button_3_double_press"
+              - conditions:
+                  - "{{ command == '4_double' }}"
+                sequence: !input "button_4_double_press"
+              - conditions:
+                  - "{{ command == '1_hold' }}"
+                sequence: !input "button_1_hold"
+              - conditions:
+                  - "{{ command == '2_hold' }}"
+                sequence: !input "button_2_hold"
+              - conditions:
+                  - "{{ command == '3_hold' }}"
+                sequence: !input "button_3_hold"
+              - conditions:
+                  - "{{ command == '4_hold' }}"
+                sequence: !input "button_4_hold"
