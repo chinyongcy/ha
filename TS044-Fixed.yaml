@@ -1,0 +1,138 @@
+blueprint:
+  name: Zigbee2MQTT - Tuya 4-Button Scene Switch TS004F
+  description: Automate your Tuya 4-Button Scene Switch (TS004F) via Zigbee2MQTT. Link - https://www.zigbee2mqtt.io/devices/TS004F.html
+  domain: automation
+  input:
+    switch:
+      name: TS004F Switch
+      description: Tuya 4-Button Wireless Switch
+      selector:
+        entity:
+          domain: sensor
+          integration: mqtt
+    1_single:
+      name: Button 1 - Single Press
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
+      selector:
+        action: null
+    1_hold:
+      name: Button 1 - Hold
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
+      selector:
+        action: null
+    1_dobule:
+      name: Button 1 - Double Press
+      description: Action to run on button 1 (bottom-left) single press
+      default: []
+      selector:
+        action: null
+    2_single:
+      name: Button 2 - Single Press
+      description: Action to run on button 2 (lower-right) single press
+      default: []
+      selector:
+        action: null
+    2_hold:
+      name: Button 2 - Hold
+      description: Action to run on button 2 (lower-right) single press
+      default: []
+      selector:
+        action: null
+    2_dobule:
+      name: Button 2 - Double Press
+      description: Action to run on button 2 (lower-right) single press
+      default: []
+      selector:
+        action: null
+    3_single:
+      name: Button 3 - Single Press
+      description: Action to run on button 3 (top-right) single press
+      default: []
+      selector:
+        action: null
+    3_hold:
+      name: Button 3 - Hold
+      description: Action to run on button 3 (top-right) single press
+      default: []
+      selector:
+        action: null
+    3_dobule:
+      name: Button 3 - Double Press
+      description: Action to run on button 3 (top-right) single press
+      default: []
+      selector:
+        action: null
+    4_single:
+      name: Button 4 - Single Press
+      description: Action to run on button 4 (top-left) single press
+      default: []
+      selector:
+        action: null
+    4_hold:
+      name: Button 4 - Long Press
+      description: Action to run on button 4 (lower-left) long press
+      default: []
+      selector:
+        action: null
+    4_dobule:
+      name: Button 4 - Double Press
+      description: Action to run on button 4 (lower-left) long press
+      default: []
+      selector:
+        action: null
+  source_url: https://gist.github.com/whalelion/5f19317ea530687a768ed2c34218cbc4
+mode: single
+max_exceeded: silent
+variables:
+  command: "{{ trigger.payload }}"
+  topic: "{{ trigger.topic }}"
+  switch_name: !input "switch"
+  deviceName: "{{ state_attr(switch_name, 'friendly_name') }}"
+trigger:
+  - platform: mqtt
+    topic: zigbee2mqtt/+/action
+action:
+  - choose:
+      - conditions:
+          - "{{ topic.split('/')[1].replace('/', '') == deviceName.split(' ')[0]
+            }}"
+        sequence:
+          - choose:
+              - conditions:
+                  - "{{ command == '1_single' }}"
+                sequence: !input "1_single"
+              - conditions:
+                  - "{{ command == '2_single' }}"
+                sequence: !input "2_single"
+              - conditions:
+                  - "{{ command == '3_single' }}"
+                sequence: !input "3_single"
+              - conditions:
+                  - "{{ command == '4_single' }}"
+                sequence: !input "4_single"
+              - conditions:
+                  - "{{ command == '1_double' }}"
+                sequence: !input "1_dobule"
+              - conditions:
+                  - "{{ command == '2_double' }}"
+                sequence: !input "2_dobule"
+              - conditions:
+                  - "{{ command == '3_double' }}"
+                sequence: !input "3_dobule"
+              - conditions:
+                  - "{{ command == '4_double' }}"
+                sequence: !input "4_dobule"
+              - conditions:
+                  - "{{ command == '1_hold' }}"
+                sequence: !input "1_hold"
+              - conditions:
+                  - "{{ command == '2_hold' }}"
+                sequence: !input "2_hold"
+              - conditions:
+                  - "{{ command == '3_hold' }}"
+                sequence: !input "3_hold"
+              - conditions:
+                  - "{{ command == '4_hold' }}"
+                sequence: !input "4_hold"
